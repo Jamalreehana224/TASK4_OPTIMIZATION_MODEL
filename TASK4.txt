@@ -1,0 +1,13 @@
+!pip install pulp
+import pulp
+model = pulp.LpProblem("Maximize_Profit", pulp.LpMaximize)
+A = pulp.LpVariable("Product_A", lowBound=0, cat='Integer')
+B = pulp.LpVariable("Product_B", lowBound=0, cat='Integer')
+model += 40 * A + 50 * B, "Total_Profit"
+model += 2 * A + 1 * B <= 100, "Machine_1_Limit"
+model += 1 * A + 2 * B <= 80, "Machine_2_Limit"
+model.solve()
+print("Status:", pulp.LpStatus[model.status])
+print(f"Optimal units of Product A to produce: {A.varValue}")
+print(f"Optimal units of Product B to produce: {B.varValue}")
+print(f"Maximum Profit: ₹{pulp.value(model.objective)}")
